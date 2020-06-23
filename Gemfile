@@ -54,6 +54,8 @@ group :development, :test, :mysql do
   gem "poltergeist"
   gem "rspec-rails", '4.0.0.beta3' # 4/26/2019: LOCKED DOWN
   gem "test-unit"
+  gem 'phantomjs'
+
 end
 
 group :mysql do

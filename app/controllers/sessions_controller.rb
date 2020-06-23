@@ -8,8 +8,9 @@ class SessionsController < ApplicationController
     redirect_to home_dashboard_index_path if current_user
   end
 
+ 
+
   def create
-    path = params[:url].present? ? params[:url] : home_dashboard_index_path
     begin
       # Normalize the email address, why not
       user = User.authenticate(params[:email].to_s.strip.downcase, params[:password])
@@ -23,7 +24,7 @@ class SessionsController < ApplicationController
       else
         session[:user_id] = user.id
       end
-      redirect_to path
+    redirect_to post_authentication_redirect_path
     else
       flash[:error] = e.message
       render "sessions/new"
@@ -34,5 +35,13 @@ class SessionsController < ApplicationController
     cookies.delete(:auth_token)
     reset_session
     redirect_to root_path
+  end
+
+  private
+  def post_authentication_redirect_path(default_path: home_dashboard_index_path)
+    path = params[:url] || default_path
+    Rails.application.routes.recognize_path(path)
+  rescue ActionController::RoutingError
+    default_path
   end
 end

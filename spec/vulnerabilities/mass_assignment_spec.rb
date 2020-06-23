@@ -11,12 +11,14 @@ feature "mass assignment" do
 
   scenario "attack one" do
     expect(normal_user.admin).to be_falsey
+    browser = Capybara.current_session.driver.browser
+    browser.clear_cookies
     login(normal_user)
 
     params = { user: { admin: "t",
-                        id: normal_user.id,
-                        password: normal_user.clear_password,
-                        password_confirmation: normal_user.clear_password }}
+                      id: normal_user.id,
+                      password: normal_user.clear_password,
+                      password_confirmation: normal_user.clear_password } }
 
     page.driver.put "/users/#{normal_user.id}.json", params
 
@@ -24,12 +26,12 @@ feature "mass assignment" do
   end
 
   scenario "attack two, Tutorial: https://github.com/OWASP/railsgoat/wiki/R4-Extras-Mass-Assignment-Admin-Role" do
-    params = { user: {  admin: "t",
-                        email: "hackety@h4x0rs.c0m",
-                        first_name: "hackety",
-                        last_name: "hax",
-                        password: "foobarewe",
-                        password_confirmation: "foobarewe" }}
+    params = { user: { admin: "t",
+                      email: "hackety@h4x0rs.c0m",
+                      first_name: "hackety",
+                      last_name: "hax",
+                      password: "foobareweW@1",
+                      password_confirmation: "foobareweW@1" } }
 
     page.driver.post "/users", params
 
