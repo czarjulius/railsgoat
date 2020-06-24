@@ -2,7 +2,7 @@
 class ApplicationController < ActionController::Base
   before_action :authenticated, :has_info, :create_analytic, :mailer_options
   helper_method :current_user, :is_admin?, :sanitize_font
-  rescue_from ActionController::InvalidAuthenticityToken, with: :render_bad_request
+  rescue_from ActionController::InvalidAuthenticityToken, with: :render_invalid_token
 
   # Our security guy keep talking about sea-surfing, cool story bro.
   # Prevent CSRF attacks by raising an exception.
@@ -60,7 +60,7 @@ class ApplicationController < ActionController::Base
     css
   end
 
-  def render_bad_request(exception)
-    render json: exception, status: :bad_request
+  def render_invalid_token(exception)
+    render json: exception, status: :unauthorized
   end
 end

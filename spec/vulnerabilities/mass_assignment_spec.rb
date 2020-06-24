@@ -11,8 +11,8 @@ feature "mass assignment" do
 
   scenario "attack one" do
     expect(normal_user.admin).to be_falsey
-    browser = Capybara.current_session.driver.browser
-    browser.clear_cookies
+    # browser = Capybara.current_session.driver.browser
+    # browser.clear_cookies
     login(normal_user)
 
     params = { user: { admin: "t",
