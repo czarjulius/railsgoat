@@ -2,11 +2,12 @@
 class ApplicationController < ActionController::Base
   before_action :authenticated, :has_info, :create_analytic, :mailer_options
   helper_method :current_user, :is_admin?, :sanitize_font
+  rescue_from ActionController::InvalidAuthenticityToken, with: :render_bad_request
 
   # Our security guy keep talking about sea-surfing, cool story bro.
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
-  #protect_from_forgery with: :exception
+  protect_from_forgery with: :exception
 
   private
 
@@ -57,5 +58,9 @@ class ApplicationController < ActionController::Base
 
   def sanitize_font(css)
     css
+  end
+
+  def render_bad_request(exception)
+    render json: exception, status: :bad_request
   end
 end
